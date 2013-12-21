@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Golden Feet</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+    <p>
+	<strong>Anggota Kelompok :</strong>
+	<br /> Steven Renaldo Antony / 71110054
+	<br />Yustinus Arjuna Purnama Putra / 71110164
+    </p><br><br>
+    <h1>GOLDEN FEET</h1>
+    <canvas id = "canvas" height="500" width="950"></canvas>
+    <script src = "js/Jquery.js"></script>
+    <script src = "js/Utils.js"></script>
+
+    <script src="js/character/main_segment.js"></script>
+    <script src="js/character/Hand.js"></script>
+    <script src="js/character/body.js"></script>
+    <script src="js/character/hand_left.js"></script>
+    <script src="js/character/hand_right.js"></script>
+    <script src="js/character/Man.js"></script>
+    <script src = "js/PenebangBar.js"></script>
+    <script src = "js/PenebangBarImage.js"></script>
+     
+    <script src = "js/Apple.js"></script>
+    <script src = "js/Tupai.js"></script>
+    <script src = "js/BarShoot.js"></script>
+    <script src = "js/BarJump.js"></script>
+    <script src = "js/Tree.js"></script>
+    <script src = "js/Daun.js"></script>
+    <script src = "js/Kayu.js"></script>
+    <script src = "js/Asap.js"></script>
+    <script src = "js/Engine.js"></script>
+    <script src = "level/Level_1.js"></script>
+    <div id="nyawaPohon">
+	<span>Nyawa</span><hr/>
+	<img src="images/tree.png" width="38"/><input type="text" id="log0" size="2"></input><br/>Pohon 1 <br/><hr/>
+	<img src="images/tree.png" width="38"/><input type="text" id="log1" size="2"></input><br/>Pohon 2 <br/><hr/>
+	<img src="images/tree.png" width="38"/><input type="text" id="log2" size="2"></input><br/>Pohon 3 <br/><hr/>
+	<img src="images/tree.png" width="38"/><input type="text" id="log3" size="2"></input><br/>Pohon 4 <br/><hr/>
+	<img src="images/tree.png" width="38"/><input type="text" id="log4" size="2"></input><br/>Pohon 5 <br/>
+    </div>
+    <script>
+	$("#nyawaPohon").show("fast");
+	$("#control").show("fast");	
+	var canvas = document.getElementById('canvas'),
+	context = canvas.getContext('2d');
+	
+        var engine = new Engine();
+        engine.init();
+        
+        var level = new Level_1(engine,context);
+        level.init();
+
+        (function drawFrame() {
+            window.requestAnimationFrame(drawFrame,canvas);
+            context.clearRect(0,0,canvas.width,canvas.height);
+            if (level.ready) {
+		level.draw(context);
+	    }
+	    
+	    log0.value = this.engine.pohon[0].nyawa;
+	    log1.value = this.engine.pohon[1].nyawa;
+	    log2.value = this.engine.pohon[2].nyawa;
+	    log3.value = this.engine.pohon[3].nyawa;
+	    log4.value = this.engine.pohon[4].nyawa;
+        }());
+    </script>
+    <div id="control">Space : Melompat &nbsp&nbsp&nbsp A : Arah Tupai Kiri &nbsp&nbsp&nbsp D : Arah Tupai Kanan &nbsp&nbsp&nbsp RightMouse : Menembak</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+body{
+	width: 960px;
+	margin-left: auto;
+	margin-right: auto;
+}
+h1,p{
+	font-family: Arial, "MS Trebuchet", sans-serif;
+	color: green;
+	text-align: center;
+}
+
+h1{
+	font-size: 30pt;
+}
+
+p{
+	font-size: 20pt;
+}
+#canvas{
+	background:url("../images/background.png");
+	/*background-color: rgb(238,238,238);*/
+	margin-top:10px;
+}
+#nyawa{
+	color:white;
+	position:relative;
+	left:890px;
+	top:-495px;
+}
+#nyawaPohon{
+	border:1px solid black;
+	position:realtive;
+	margin-top:-504px;
+	margin-left:-94px;
+	padding:5px;
+	width:100px;
+	display:none;
+}
+#control{
+	text-align:right;
+	position:relative;
+	margin-top:-40px;
+	background:#7A6906;
+	width:930px;
+	padding:10px;
+	color:white;
+}
+#nyawaPohon span{
+	font-size:17pt;
+	background:#7A6906;
+	color:white;
+}
