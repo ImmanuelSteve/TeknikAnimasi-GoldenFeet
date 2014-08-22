@@ -8,6 +8,7 @@ function Level_1(engine,context) {
     this.kurangiNyawaPohonInterval=0;
     this.ready = false;
     this.opacityPohonInterval;
+    this.sfxTebang = new Audio();
 }
 
 Level_1.prototype.init = function() {
@@ -18,7 +19,7 @@ Level_1.prototype.init = function() {
     for (var daun, i = 0; i < this.engine.jumlahDaun; i++) {
         daun = new Daun("images/daun.png");
         daun.x = canvas.width + 100;
-        daun.y = canvas.height + 100;
+        daun.y = canvas.height + 200;
         daun.vy = Math.random() * 10;
         this.engine.daunArray.push(daun);
     }
@@ -34,6 +35,8 @@ Level_1.prototype.init = function() {
     this.engine.apple.x = this.engine.pohon[this.treeFruit].getBounds().x+10;
     this.engine.apple.y = this.engine.pohon[this.treeFruit].getBounds().y+10;
     this.ready = true;
+    this.sfxTebang.src = "sfx/Scary Chainsaw-SoundBible.com-1146425849.mp3";
+    this.sfxTebang.volume=0.4;
 };
 
 
@@ -48,7 +51,7 @@ Level_1.prototype.draw = function(context) {
         //context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
         if (utils.intersects(this.engine.pohon[i].getBounds(), this.engine.tupai.getBounds())) {
             
-            this.counterDaun = 280;
+            this.counterDaun = 270;
             this.engine.tupai.y=this.engine.pohon[i].y-40;
             this.engine.tupai.resetValue();
             this.engine.tupai.atpohon = i;
@@ -70,11 +73,13 @@ Level_1.prototype.draw = function(context) {
             //console.log(this.engine.pohon[this.engine.penebang.target_pohon].x);
             //console.log("masuk ini");
             this.counterKayu = 1;
+            this.sfxTebang.play();
             var pohon = this.engine.pohon[this.engine.penebang.target_pohon];
             if (this.kurangiNyawaPohonInterval==0) {
                 this.kurangiNyawaPohonInterval = setInterval(function(){pohon.kurangiNyawa();},300);
             }
         }else{
+            this.sfxTebang.pause();
             //console.log(this.engine.penebang.body.x);
             //console.log(this.engine.pohonbawah[this.engine.penebang.target_pohon].x);
             clearInterval(this.kurangiNyawaPohonInterval);    
@@ -122,7 +127,7 @@ Level_1.prototype.draw = function(context) {
         //console.log("Sesudah Posisi apple di pohon ke - "+this.treeFruit);
     }
     if(!this.engine.tupai.getball && !this.engine.apple.isUsed){
-        this.engine.penebang.kenaTembak = false;
+        this.engine.penebang.kenaTembak = false;//rev1
         this.engine.apple.x = this.engine.pohon[this.treeFruit].getBounds().x+10;
         this.engine.apple.y = this.engine.pohon[this.treeFruit].getBounds().y+10;
     }
@@ -130,5 +135,7 @@ Level_1.prototype.draw = function(context) {
     this.engine.apple.draw(context,this.engine.tupai);
     bounds = this.engine.apple.getBounds();
     //context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
-
+    if (this.engine.state == false) {
+        this.ready = false;
+    }
 };

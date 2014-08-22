@@ -40,13 +40,13 @@ p{
 	text-align:right;
 	position:relative;
 	margin-top:-40px;
-	background:#7A6906;
+	background: rgb(63,68,70);
 	width:930px;
 	padding:10px;
 	color:white;
 }
 #nyawaPohon span{
 	font-size:17pt;
-	background:#7A6906;
+	background: rgb(63,68,70);
 	color:white;
 }

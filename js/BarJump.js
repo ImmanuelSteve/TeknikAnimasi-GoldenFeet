@@ -3,7 +3,7 @@ function BarJump(owner) {
     this.x = 0;
     this.y = 0;
     this.w = 0;
-    this.color = "rgb(255,255,0)";
+    this.color = "rgb(255,255,255)";
 }
 
 BarJump.prototype = {
@@ -26,7 +26,7 @@ BarJump.prototype = {
         context.quadraticCurveTo((x1+x2)/2, height, x2, from);
 
         context.lineWidth = 5;
-        context.strokeStyle = 'gray';
+        context.strokeStyle = 'white';
         context.stroke();
     }
     

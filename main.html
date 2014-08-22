@@ -8,11 +8,6 @@
 </head>
 
 <body>
-    <p>
-	<strong>Anggota Kelompok :</strong>
-	<br /> Steven Renaldo Antony / 71110054
-	<br />Yustinus Arjuna Purnama Putra / 71110164
-    </p><br><br>
     <h1>GOLDEN FEET</h1>
     <canvas id = "canvas" height="500" width="950"></canvas>
     <script src = "js/Jquery.js"></script>
@@ -26,7 +21,8 @@
     <script src="js/character/Man.js"></script>
     <script src = "js/PenebangBar.js"></script>
     <script src = "js/PenebangBarImage.js"></script>
-     
+    <script src = "js/GameOver.js"></script>
+    <script src = "js/ButtonRetry.js"></script> 
     <script src = "js/Apple.js"></script>
     <script src = "js/Tupai.js"></script>
     <script src = "js/BarShoot.js"></script>
@@ -53,17 +49,69 @@
 	
         var engine = new Engine();
         engine.init();
-        
+    
         var level = new Level_1(engine,context);
         level.init();
+	
+	//win or lose
+	var gameOver = new GameOver(270,100,"images/win.png");
+	var buttonRetry = new ButtonRetry(420,240,"images/retry_button.png");
+	var mouse = utils.captureMouse(canvas);
+	var bounds,boundsA,setGambarEnd=false;
+	
+	//sound background
+	var sfx = new Audio();
+	sfx.src = "sfx/Nature Ambiance-SoundBible.com-1444637890.mp3";
+	sfx.volume=0.5;
+	sfx.play();
+	
+	sfx.addEventListener('ended', function() {
+	    this.currentTime = 0;
+	    this.play();
+	}, false);
+	
+	canvas.addEventListener('mousedown', function () {
+	    if (utils.intersects(buttonRetry.getBounds(), mousegetBounds()) && level.ready==false) {
+		window.location="main.html";	
+	    }
+	}, false);
 
         (function drawFrame() {
+	    mousegetBounds = function () {
+		return {
+		    x: mouse.x - 8,
+		    y: mouse.y +3,
+		    width: 10*2.85,
+		    height: 25
+		};
+	    }
+	    bounds = buttonRetry.getBounds();
+	    boundsA = mousegetBounds();
             window.requestAnimationFrame(drawFrame,canvas);
             context.clearRect(0,0,canvas.width,canvas.height);
             if (level.ready) {
 		level.draw(context);
+	    }else{
+		sfx.pause();
+		if (setGambarEnd == false) {
+		    setGambarEnd = true;
+		    clearInterval(level.kurangiNyawaPohonInterval);
+		    if (this.engine.gameEnd == true) {
+			gameOver.setSprite("images/win.png");
+		    }else{
+			gameOver.setSprite("images/lose.png");
+		    }
+		}
+		gameOver.draw(context);
+		buttonRetry.draw(context);
+		if (utils.intersects(buttonRetry.getBounds(), mousegetBounds())) {
+		    document.body.style.cursor = 'pointer';	
+		}else{
+		    document.body.style.cursor = 'default';	
+		}
+		//context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		//context.strokeRect(boundsA.x, boundsA.y, boundsA.width, boundsA.height);
 	    }
-	    
 	    log0.value = this.engine.pohon[0].nyawa;
 	    log1.value = this.engine.pohon[1].nyawa;
 	    log2.value = this.engine.pohon[2].nyawa;

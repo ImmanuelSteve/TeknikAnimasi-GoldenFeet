@@ -44,8 +44,9 @@ function Engine() {
     this.graji = new Segment(image9,0,0,-69,-22/2);
 
     this.penebang = new Man(head,body,hand_left,hand_right,leg_left,leg_right);
-    this.penebangHp = new PenebangBar(710,10,200);
-    this.penebangHpImage = new Penebang(910,10,"images/penebang/m_head.png");
+    this.penebangHp = new PenebangBar(690,18,200);
+    //this.penebangHp = new PenebangBar(790,10,120);
+    this.penebangHpImage = new Penebang(900,18,"images/penebang/m_head.png");
 
     this.tupai = new Tupai(45,150,1);
     this.tupai.setSprite("images/tupai2.png");   
@@ -67,6 +68,10 @@ function Engine() {
     this.angryInterval;
     this.penebangTargetPohonLama = this.penebang.target_pohon;
     this.mati = false;
+    this.state = true;
+    this.gameEnd = true;
+    this.penebang_bar_sprite = new Image();
+    this.sfxPohonTumbang = new Audio();
 }
 
 
@@ -75,7 +80,9 @@ Engine.prototype.init = function ()
     this.penebang.body.x = -100;
     this.penebang.flip = -1;
     this.penebang.gerakan_penebang = 0;
-
+    this.penebang_bar_sprite.src =  "images/penebang_bar.png";
+    this.sfxPohonTumbang.src = "sfx/Tree_Fall_Small-Daniel_Simion-1639156552.mp3";
+    this.sfxPohonTumbang.volume=0.4;
     var penebang = this.penebang;
     var apple = this.apple;
     var tupai = this.tupai;
@@ -107,8 +114,7 @@ Engine.prototype.init = function ()
         }else if(event.keyCode===68 && tupai.isJump==true){
             tupai.arah = 1;
             tupai.setSprite("images/tupai2.png");
-        }
-        else if(event.keyCode===69){
+        }else if(event.keyCode===69){
             penebang.gerakan_penebang = 1;
         }
     },false);
@@ -130,6 +136,7 @@ Engine.prototype.init = function ()
 Engine.prototype.draw = function (context) 
 {
     //jika tupai ada dipohon yang tumbang
+    context.drawImage(this.penebang_bar_sprite,690,19);//sementara
     if (this.pohon[this.tupai.atpohon].isFall ==  true && this.mati == false) {
         //this.tupai.powerJump += 0.5;
         if (this.tupai.isJump == true) {
@@ -145,8 +152,8 @@ Engine.prototype.draw = function (context)
     if (utils.intersects(this.apple.getBounds(),this.penebang.body.getBounds()) && this.penebang.kenaTembak == false) {
         console.log("kena");
         this.penebang.kenaTembak = true;
-        this.penebangHp.w -= 20;
-        this.penebangHpImage.x -= 20;
+        this.penebangHp.w -= 25;
+        this.penebangHp.x += 25;
         this.penebang.gerakan_penebang = -1;
         this.penebangTargetPohonLama =  this.penebang.target_pohon;
         this.penebang.target_pohon = this.tupai.atpohon;
@@ -155,12 +162,17 @@ Engine.prototype.draw = function (context)
     //penebang pindah ketika nyawa habis
     if (this.pohon[this.penebang.target_pohon].nyawa == 0) {
         //this.pohon[this.penebang.target_pohon].isFall = true;
-        this.penebangTargetPohonLama =  this.penebang.target_pohon; 
-        do{
-              this.penebang.target_pohon=Math.floor(Math.random()*5);  
-        }while (this.pohon[this.penebang.target_pohon].isFall==true && this.jumlah_pohon > 1);
-        this.jumlah_pohon--;
-        this.penebang.gerakan_penebang = -1;
+         this.sfxPohonTumbang.play();
+         this.penebangTargetPohonLama =  this.penebang.target_pohon; 
+         if(this.jumlah_pohon == 1 && this.pohon[this.penebangTargetPohonLama].nyawa == 0) {
+                this.penebang.reset();
+        }else{
+                do{
+                      this.penebang.target_pohon=Math.floor(Math.random()*5);  
+                }while (this.pohon[this.penebang.target_pohon].isFall==true && this.jumlah_pohon > 1);
+                this.jumlah_pohon--;
+                this.penebang.gerakan_penebang = -1;
+        }
     }
     
     //arah pohon tumbang
@@ -190,6 +202,7 @@ Engine.prototype.draw = function (context)
     else if(this.penebang.gerakan_penebang == 0){
         if (this.angryInterval!=null) {
             clearInterval(this.angryInterval);
+            
         }
         
         this.penebang.run();
@@ -214,10 +227,11 @@ Engine.prototype.draw = function (context)
     else {
         if (this.penebang.gerakan_penebang ==-1){
                 this.penebang.reset();
-                if (this.pohon[this.penebang.target_pohon].x<=this.penebang.body.x) {
+                console.log(this.pohon[this.penebang.target_pohon].x);console.log(" ");console.log(this.penebang.body.x);
+                if (this.pohon[this.penebang.target_pohon].x + 7<this.penebang.body.x) {
                         this.penebang.flip = 1;
                 }
-                else this.penebang.flip = -1;
+                else {this.penebang.flip = -1; }
                 var p = this.penebang;
                 this.angryInterval = setInterval(function(){p.gerakan_penebang = 0;},1000);
                 this.penebang.gerakan_penebang = 2;
@@ -225,8 +239,8 @@ Engine.prototype.draw = function (context)
         //console.log("case4");
     }
     //kalah dan efek debu
-    if (this.tupai.y > 330) {
-        this.tupai.y = 330;
+    if (this.tupai.y > 315) {
+        this.tupai.y = 315;
         this.tupai.resetValue();
         var debu = this.debu;
         debu.x = this.tupai.x;
@@ -234,13 +248,18 @@ Engine.prototype.draw = function (context)
         this.debuInterval = setInterval(function(){debu.setOpacity(0.1, debu.tanda);},1000/8);
     }
     if (this.penebangHp.w <= 0) {
-        alert("Anda menang !!");
-        window.location="main.html";
-    }else if(this.debu.aopacity == 0 && !this.debu.tanda
-       || (this.jumlah_pohon == 0 && this.pohon[this.penebang.target_pohon].degree < -75 && this.pohon[this.penebang.target_pohon].isFall == true)){
+         this.state = false;
+        //menang
+    }else if(this.jumlah_pohon == 1 && this.pohon[this.penebang.target_pohon].degree < -75 && this.pohon[this.penebang.target_pohon].isFall == true){
+        this.state = false;
+        this.gameEnd = false;
+    }
+    if(this.debu.aopacity == 0 && this.debu.tanda==false){
+        this.state = false;
+        this.gameEnd = false;
         clearInterval(this.debuInterval);
-        alert("Anda kalah !!");
-        window.location="main.html";
+        //alert("Anda kalah !!");
+        //window.location="main.html";
     }
     this.debu.draw(context);
     //cek boundary

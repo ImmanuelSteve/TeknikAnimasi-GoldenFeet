@@ -1,6 +1,6 @@
 function Kayu(radius,color){
 	if(radius==undefined){radius=40}
-	if(color==undefined){color="rgb(242,126,16)";}
+	if(color==undefined){color="rgb(213,127,103)";}
 	this.x=0;
 	this.y=0;
 	this.color=utils.parseColor(color);

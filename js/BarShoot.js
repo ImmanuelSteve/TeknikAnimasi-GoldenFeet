@@ -3,7 +3,7 @@ function BarShoot(owner) {
     this.x = 0;
     this.y = 0;
     this.w = 0;
-    this.color = "rgb(255,0,0)";
+    this.color = "rgb(162,207,69)";
 }
 
 BarShoot.prototype = {
@@ -11,6 +11,14 @@ BarShoot.prototype = {
     draw : function(canvasContext)
     {
         canvasContext.save();
+	if (this.w > 0) {
+	    canvasContext.beginPath(); //harus ada saat menggambar
+	    
+	    canvasContext.fillStyle = "rgb(63,68,70)";
+	    canvasContext.fillRect(this.owner.x-10,this.owner.y-30,100,30);
+	    canvasContext.stroke();
+	}
+	
         canvasContext.beginPath(); //harus ada saat menggambar
         
         canvasContext.fillStyle = this.color;

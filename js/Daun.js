@@ -20,7 +20,7 @@ Daun.prototype = {
     {
         canvasContext.save();
         
-        canvasContext.drawImage(this.sprite,this.x,this.y,5,20);
+        canvasContext.drawImage(this.sprite,this.x,this.y,10,25);
         
         canvasContext.restore();
     }

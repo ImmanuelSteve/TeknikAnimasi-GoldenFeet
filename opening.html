@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Golden Feet</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+    <h1>GOLDEN FEET</h1>
+    <canvas id = "canvas" height="500" width="950"></canvas>
+    <script src = "js/Utils.js"></script>
+    <script src = "js/GameOver.js"></script>
+    <script src = "js/ButtonRetry.js"></script>
+    <script>
+	var canvas = document.getElementById('canvas'),
+	context = canvas.getContext('2d');
+	
+	//win or lose
+	var gameOver = new GameOver(270,100,"images/opening.png");
+	var buttonRetry = new ButtonRetry(420,240,"images/play.png");
+	var mouse = utils.captureMouse(canvas);
+	var bounds,boundsA;
+	
+	canvas.addEventListener('mousedown', function () {
+	    if (utils.intersects(buttonRetry.getBounds(), mousegetBounds())) {
+		window.location="main.html";	
+	    }
+	}, false);
+
+        (function drawFrame() {
+	    mousegetBounds = function () {
+		return {
+		    x: mouse.x - 8,
+		    y: mouse.y +3,
+		    width: 10*2.85,
+		    height: 25
+		};
+	    }
+	    bounds = buttonRetry.getBounds();
+	    boundsA = mousegetBounds();
+            window.requestAnimationFrame(drawFrame,canvas);
+            context.clearRect(0,0,canvas.width,canvas.height);
+	    gameOver.draw(context);
+	    buttonRetry.draw(context);
+	    if (utils.intersects(buttonRetry.getBounds(), mousegetBounds())) {
+		document.body.style.cursor = 'pointer';	
+	    }else{
+		document.body.style.cursor = 'default';	
+	    }
+	    //context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
+	    //context.strokeRect(boundsA.x, boundsA.y, boundsA.width, boundsA.height);
+        }());
+    </script>
+    <div id="control">Space : Melompat &nbsp&nbsp&nbsp A : Arah Tupai Kiri &nbsp&nbsp&nbsp D : Arah Tupai Kanan &nbsp&nbsp&nbsp RightMouse : Menembak</div>
+</body>
+</html>
